@@ -4,7 +4,6 @@
  */
 package gitadatabase;
 
-import java.sql.*;
 /**
  *
  * @author casolaro.diego
@@ -18,6 +17,10 @@ public class GitaDatabase {
         FrameGita fG = new FrameGita();
         fG.setLocationRelativeTo(null);
         fG.setVisible(true);
+        
+        Database db = new Database();
+        db.creaDatabase();
+        db.aggiungiElementi();
     }
     
 }
