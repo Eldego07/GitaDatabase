@@ -15,9 +15,10 @@ public class Database {
 
     public Database() {
         this.url = "jdbc:sqlite:gite.db?foreign_keys=true";
+        creaDatabase();
     }
     
-    public void creaDatabase() {        
+    private void creaDatabase() {        
         String sqlGite = "CREATE TABLE IF NOT EXISTS gite (" +
                          "git_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                          "git_destinazione varchar(30), " +
@@ -67,16 +68,42 @@ public class Database {
         }
     }
     
-    public void aggiungiElementi() {
+    public void aggiungiGita(Gita g) {
         try (Connection conn = DriverManager.getConnection(url)) {
-            
             String insert = "INSERT INTO gite(git_destinazione, git_durata, git_prezzo) VALUES(?, ?, ?)";
 
             PreparedStatement pstmt = conn.prepareStatement(insert);
-            pstmt.setString(1, "Roma");
+            pstmt.setString(1, g.getLuogo());
             pstmt.setInt(2, 3);
             pstmt.setInt(3, 150);
             pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public void stampaGite() {
+    String query = "SELECT * FROM gite";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int id = rs.getInt("git_id");
+                String destinazione = rs.getString("git_destinazione");
+                int durata = rs.getInt("git_durata");
+                int prezzo = rs.getInt("git_prezzo");
+
+                System.out.println(
+                    id + " | " +
+                    destinazione + " | " +
+                    durata + " giorni | " +
+                    prezzo + "€"
+                );
+            }
+
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }

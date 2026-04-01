@@ -18,6 +18,7 @@ public class FrameGita extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameGita.class.getName());
     private RaccoltaGite rG;
     private GestioneFile gF;
+    private Database d;
     private DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Luogo"}, 10);
 
     /**
@@ -27,6 +28,7 @@ public class FrameGita extends javax.swing.JFrame {
         initComponents();
         rG = new RaccoltaGite();
         gF = new GestioneFile();
+        d = new Database();
         impostaTabella();
         cmbGite.addItem("Visualizza Gite");
     }
@@ -263,9 +265,11 @@ public class FrameGita extends javax.swing.JFrame {
         
         int id = aG.getId();
         String luogo = aG.getLuogo();
+        Gita g = new Gita(id, luogo);
         
-        if (rG.aggiungiGita(new Gita(id, luogo))) {
+        if (rG.aggiungiGita(g)) {
             cmbGite.addItem(luogo);
+            d.aggiungiGita(g);
         }
         
         aggiornaGite();
