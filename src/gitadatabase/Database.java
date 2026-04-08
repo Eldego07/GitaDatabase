@@ -74,8 +74,8 @@ public class Database {
 
             PreparedStatement pstmt = conn.prepareStatement(insert);
             pstmt.setString(1, g.getLuogo());
-            pstmt.setInt(2, 3);
-            pstmt.setInt(3, 150);
+            pstmt.setInt(2, g.getDurata());
+            pstmt.setInt(3, g.getPrezzo());
             pstmt.executeUpdate();
             
         } catch (SQLException e) {
@@ -84,11 +84,11 @@ public class Database {
     }
     
     public void stampaGite() {
-    String query = "SELECT * FROM gite";
+        String query = "SELECT * FROM gite";
 
         try (Connection conn = DriverManager.getConnection(url);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("git_id");
@@ -100,7 +100,48 @@ public class Database {
                     id + " | " +
                     destinazione + " | " +
                     durata + " giorni | " +
-                    prezzo + "€"
+                    prezzo + " euro"
+                );
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public void aggiungiClasse(Classe c) {
+        try (Connection conn = DriverManager.getConnection(url)) {
+            String insert = "INSERT INTO classi(cla_anno, cla_sezione, cla_indirizzo) VALUES(?, ?, ?)";
+
+            PreparedStatement pstmt = conn.prepareStatement(insert);
+            pstmt.setInt(1, c.getAnno());
+            pstmt.setString(2, c.getSezione());
+            pstmt.setString(3, c.getIndirizzo());
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public void stampaClassi() {
+        String query = "SELECT * FROM classi";
+
+        try (Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int id = rs.getInt("cla_id");
+                int anno = rs.getInt("cla_anno");
+                String sezione = rs.getString("cla_sezione");
+                String indirizzo = rs.getString("cla_indirizzo");
+
+                System.out.println(
+                    id + " | " +
+                    anno + " | " +
+                    sezione + " | " +
+                    indirizzo
                 );
             }
 

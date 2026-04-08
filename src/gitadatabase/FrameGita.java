@@ -17,7 +17,6 @@ public class FrameGita extends javax.swing.JFrame {
     // Attributi
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameGita.class.getName());
     private RaccoltaGite rG;
-    private GestioneFile gF;
     private Database d;
     private DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Luogo"}, 10);
 
@@ -27,7 +26,6 @@ public class FrameGita extends javax.swing.JFrame {
     public FrameGita() {
         initComponents();
         rG = new RaccoltaGite();
-        gF = new GestioneFile();
         d = new Database();
         impostaTabella();
         cmbGite.addItem("Visualizza Gite");
@@ -47,6 +45,10 @@ public class FrameGita extends javax.swing.JFrame {
         for (Gita g : rG.getListaGite()) {
             model.addRow(new Object[]{g.getId(), g.getLuogo()});
         }
+        
+        // controllo
+        d.stampaGite();
+        d.stampaClassi();
     }
     
     public void aggiornaStudenti() { 
@@ -112,11 +114,12 @@ public class FrameGita extends javax.swing.JFrame {
         btnRimuoviStudente = new javax.swing.JButton();
         btnAggiungiGita = new javax.swing.JButton();
         btnRimuoviGita = new javax.swing.JButton();
-        btnCaricaFile = new javax.swing.JButton();
+        btnAggiungiClasse = new javax.swing.JButton();
         btnAggiungiStudente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Prenotazione Gita");
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         pnlTitolo.setBackground(new java.awt.Color(204, 255, 255));
         pnlTitolo.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -134,7 +137,6 @@ public class FrameGita extends javax.swing.JFrame {
         pnlMain.setLayout(new java.awt.BorderLayout());
 
         pnlSinistra.setBackground(new java.awt.Color(204, 255, 255));
-        pnlSinistra.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Visualizza le gite qui", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
         pnlSinistra.setPreferredSize(new java.awt.Dimension(400, 500));
         pnlSinistra.setLayout(new java.awt.BorderLayout());
 
@@ -163,16 +165,6 @@ public class FrameGita extends javax.swing.JFrame {
         cmbGite.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cmbGiteMouseClicked(evt);
-            }
-        });
-        cmbGite.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbGiteActionPerformed(evt);
-            }
-        });
-        cmbGite.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                cmbGitePropertyChange(evt);
             }
         });
         pnlCentro.add(cmbGite);
@@ -229,16 +221,16 @@ public class FrameGita extends javax.swing.JFrame {
         pnlDestra.add(btnRimuoviGita);
         btnRimuoviGita.setBounds(40, 130, 230, 70);
 
-        btnCaricaFile.setBackground(new java.awt.Color(255, 204, 0));
-        btnCaricaFile.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        btnCaricaFile.setText("Carica File");
-        btnCaricaFile.addActionListener(new java.awt.event.ActionListener() {
+        btnAggiungiClasse.setBackground(new java.awt.Color(102, 255, 102));
+        btnAggiungiClasse.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnAggiungiClasse.setText("Aggiungi Classe");
+        btnAggiungiClasse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCaricaFileActionPerformed(evt);
+                btnAggiungiClasseActionPerformed(evt);
             }
         });
-        pnlDestra.add(btnCaricaFile);
-        btnCaricaFile.setBounds(40, 430, 230, 70);
+        pnlDestra.add(btnAggiungiClasse);
+        btnAggiungiClasse.setBounds(40, 430, 230, 70);
 
         btnAggiungiStudente.setBackground(new java.awt.Color(102, 255, 102));
         btnAggiungiStudente.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -265,7 +257,9 @@ public class FrameGita extends javax.swing.JFrame {
         
         int id = aG.getId();
         String luogo = aG.getLuogo();
-        Gita g = new Gita(id, luogo);
+        int durata = aG.getDurata();
+        int prezzo = aG.getPrezzo();
+        Gita g = new Gita(id, luogo, durata, prezzo);
         
         if (rG.aggiungiGita(g)) {
             cmbGite.addItem(luogo);
@@ -275,37 +269,14 @@ public class FrameGita extends javax.swing.JFrame {
         aggiornaGite();
     }//GEN-LAST:event_btnAggiungiGitaActionPerformed
 
-    private void btnCaricaFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCaricaFileActionPerformed
-        // Svuota la raccolta attuale
-        rG.svuota();
-        SceltaFile sF = new SceltaFile(this,true);
-        sF.setLocationRelativeTo(null);
-        sF.setVisible(true);
-        // Carica gite e studenti dai file
-        gF.setFILE_GITE(sF.getFile());
+    private void btnAggiungiClasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAggiungiClasseActionPerformed
+        AggiuntaClasse aC = new AggiuntaClasse(this, true);
+        aC.setLocationRelativeTo(null);
+        aC.setVisible(true);
         
-        SceltaFile sF1 = new SceltaFile(this,true);
-        sF1.cambiaTesto();
-        sF1.setLocationRelativeTo(null);
-        sF1.setVisible(true);
-        
-        gF.setFILE_STUDENTI(sF1.getFile());
-        ArrayList<Gita> giteCaricate = gF.caricaTutto();
-
-        // Aggiunge le gite caricate nella raccolta e aggiorna la combobox
-        cmbGite.removeAllItems();
-        
-        for (Gita g : giteCaricate) {
-            rG.aggiungiGita(g);
-            cmbGite.addItem(g.getLuogo());
-        }
-
-        // Aggiorna la tabella
-        aggiornaGite();
-        
-        cmbGite.addItem("Visualizza Gite");
-        cmbGite.setSelectedItem("Visualizza Gite");
-    }//GEN-LAST:event_btnCaricaFileActionPerformed
+        Classe c = aC.getC();
+        d.aggiungiClasse(c);
+    }//GEN-LAST:event_btnAggiungiClasseActionPerformed
 
     private void btnRimuoviStudenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRimuoviStudenteActionPerformed
         rimuoviStudente();
@@ -328,12 +299,8 @@ public class FrameGita extends javax.swing.JFrame {
         rG.cercaGita(idGita).aggiungiStudente(new Studente(id, nome, cognome));
     }//GEN-LAST:event_btnAggiungiStudenteActionPerformed
 
-    private void cmbGiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGiteActionPerformed
-        
-    }//GEN-LAST:event_cmbGiteActionPerformed
-
     private void btnSalvaFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvaFileActionPerformed
-        gF.salvaTutto(rG.getListaGite());
+
     }//GEN-LAST:event_btnSalvaFileActionPerformed
 
     private void cmbGiteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbGiteMouseClicked
@@ -344,14 +311,10 @@ public class FrameGita extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cmbGiteMouseClicked
 
-    private void cmbGitePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cmbGitePropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbGitePropertyChange
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAggiungiClasse;
     private javax.swing.JButton btnAggiungiGita;
     private javax.swing.JButton btnAggiungiStudente;
-    private javax.swing.JButton btnCaricaFile;
     private javax.swing.JButton btnRimuoviGita;
     private javax.swing.JButton btnRimuoviStudente;
     private javax.swing.JButton btnSalvaFile;

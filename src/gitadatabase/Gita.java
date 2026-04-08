@@ -14,6 +14,8 @@ public class Gita {
     // Attributi
     private int id;
     private String luogo;
+    private int durata;
+    private int prezzo;
     private ArrayList<Studente> listaStudenti;
     private HashSet<Integer> insiemeMatricole;
     private HashMap<Integer, Studente> mappaStudenti;
@@ -21,9 +23,11 @@ public class Gita {
     /**
      * Costruttore di Anagrafe
      */
-    public Gita(int id, String luogo) {
+    public Gita(int id, String luogo, int durata, int prezzo) {
         this.id = id;
         this.luogo = luogo;
+        this.durata = durata;
+        this.prezzo = prezzo;
         listaStudenti = new ArrayList<>();
         insiemeMatricole = new HashSet<>();
         mappaStudenti = new HashMap<>();
@@ -124,5 +128,13 @@ public class Gita {
     public String getLuogo() {
         return luogo;
     }
-    
+
+    public int getDurata() {
+        return durata;
+    }
+
+    public int getPrezzo() {
+        return prezzo;
+    }
+
 }
