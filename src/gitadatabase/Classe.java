@@ -31,5 +31,10 @@ public class Classe {
     public String getIndirizzo() {
         return indirizzo;
     }
+
+    @Override
+    public String toString() {
+        return "Classe{" + "anno=" + anno + ", sezione=" + sezione + ", indirizzo=" + indirizzo + '}';
+    }
      
 }

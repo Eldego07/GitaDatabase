@@ -4,6 +4,8 @@
  */
 package gitadatabase;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author taboada.taddeo
@@ -13,13 +15,23 @@ public class AggiuntaStudente extends javax.swing.JDialog {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AggiuntaStudente.class.getName());
     private String nome, cognome;
     private int id, idGita;
+    private Classe classe;
+    private ArrayList<Classe> classi;
 
     /**
      * Creates new form AggiuntaStudente
      */
-    public AggiuntaStudente(java.awt.Frame parent, boolean modal) {
+    public AggiuntaStudente(java.awt.Frame parent, boolean modal, ArrayList<Classe> classi) {
         super(parent, modal);
         initComponents();
+        this.classi = classi;
+        riempiClassi();
+    }
+    
+    private void riempiClassi() {
+        for (Classe c : classi) {
+            cmbClassi.addItem(nome);
+        }
     }
 
     /**
@@ -43,6 +55,8 @@ public class AggiuntaStudente extends javax.swing.JDialog {
         txtCognome = new javax.swing.JTextField();
         lblIdGita = new javax.swing.JLabel();
         txtIdGita = new javax.swing.JTextField();
+        lblClasse = new javax.swing.JLabel();
+        cmbClassi = new javax.swing.JComboBox<>();
         pnlConferma = new javax.swing.JPanel();
         btnConferma = new javax.swing.JButton();
 
@@ -65,7 +79,7 @@ public class AggiuntaStudente extends javax.swing.JDialog {
 
         pnlCentro.setBackground(new java.awt.Color(153, 255, 255));
         pnlCentro.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        pnlCentro.setLayout(new java.awt.GridLayout(4, 2, 10, 10));
+        pnlCentro.setLayout(new java.awt.GridLayout(5, 2, 10, 10));
 
         lblId.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblId.setText("ID:");
@@ -95,6 +109,12 @@ public class AggiuntaStudente extends javax.swing.JDialog {
         txtIdGita.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         pnlCentro.add(txtIdGita);
 
+        lblClasse.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblClasse.setText("Classe:");
+        pnlCentro.add(lblClasse);
+
+        pnlCentro.add(cmbClassi);
+
         getContentPane().add(pnlCentro, java.awt.BorderLayout.CENTER);
 
         pnlConferma.setBackground(new java.awt.Color(153, 255, 255));
@@ -121,6 +141,7 @@ public class AggiuntaStudente extends javax.swing.JDialog {
         nome = txtNome.getText();
         cognome = txtCognome.getText();
         idGita = Integer.parseInt(txtIdGita.getText());
+        classe = (Classe) cmbClassi.getSelectedItem();
         dispose();
     }//GEN-LAST:event_btnConfermaActionPerformed
 
@@ -140,9 +161,15 @@ public class AggiuntaStudente extends javax.swing.JDialog {
         return idGita;
     }
 
+    public Classe getClasse() {
+        return classe;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConferma;
+    private javax.swing.JComboBox<String> cmbClassi;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblClasse;
     private javax.swing.JLabel lblCognome;
     private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblIdGita;

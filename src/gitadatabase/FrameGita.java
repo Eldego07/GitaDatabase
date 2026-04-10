@@ -6,6 +6,7 @@ package gitadatabase;
 
 import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.SpinnerListModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 
@@ -17,8 +18,10 @@ public class FrameGita extends javax.swing.JFrame {
     // Attributi
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameGita.class.getName());
     private RaccoltaGite rG;
+    private ArrayList<Classe> classi, listaModificabile;
     private Database d;
     private DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Luogo"}, 10);
+    private SpinnerListModel TuaMadre = new SpinnerListModel(listaModificabile);
 
     /**
      * Creates new form FrameGita
@@ -26,9 +29,22 @@ public class FrameGita extends javax.swing.JFrame {
     public FrameGita() {
         initComponents();
         rG = new RaccoltaGite();
+        classi = new ArrayList<>();
         d = new Database();
         impostaTabella();
         cmbGite.addItem("Visualizza Gite");
+        listaModificabile = new ArrayList<>(); // Assicurati sia inizializzata
+    Classe visual = new Classe(20, "20", "20");
+    listaModificabile.add(visual); 
+    
+    // 2. Crea il modello ORA che la lista ha almeno un elemento
+    TuaMadre = new SpinnerListModel(listaModificabile);
+    
+    // 3. Associa il modello allo spinner
+    spClassi.setModel(TuaMadre);
+
+    impostaTabella();
+    cmbGite.addItem("Visualizza Gite");
     }
     
     private void impostaTabella() {
@@ -109,7 +125,8 @@ public class FrameGita extends javax.swing.JFrame {
         tblVisualizza = new javax.swing.JTable();
         pnlCentro = new javax.swing.JPanel();
         cmbGite = new javax.swing.JComboBox<>();
-        btnSalvaFile = new javax.swing.JButton();
+        btnCancellaDati = new javax.swing.JButton();
+        spClassi = new javax.swing.JSpinner();
         pnlDestra = new javax.swing.JPanel();
         btnRimuoviStudente = new javax.swing.JButton();
         btnAggiungiGita = new javax.swing.JButton();
@@ -119,7 +136,6 @@ public class FrameGita extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Prenotazione Gita");
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         pnlTitolo.setBackground(new java.awt.Color(204, 255, 255));
         pnlTitolo.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -171,16 +187,21 @@ public class FrameGita extends javax.swing.JFrame {
         cmbGite.setBounds(40, 30, 240, 70);
         cmbGite.getAccessibleContext().setAccessibleDescription("");
 
-        btnSalvaFile.setBackground(new java.awt.Color(255, 204, 0));
-        btnSalvaFile.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        btnSalvaFile.setText("Salva File");
-        btnSalvaFile.addActionListener(new java.awt.event.ActionListener() {
+        btnCancellaDati.setBackground(new java.awt.Color(255, 204, 0));
+        btnCancellaDati.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnCancellaDati.setText("Cancella Dati");
+        btnCancellaDati.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvaFileActionPerformed(evt);
+                btnCancellaDatiActionPerformed(evt);
             }
         });
-        pnlCentro.add(btnSalvaFile);
-        btnSalvaFile.setBounds(40, 430, 230, 70);
+        pnlCentro.add(btnCancellaDati);
+        btnCancellaDati.setBounds(40, 430, 230, 70);
+
+        spClassi.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        spClassi.setModel(new javax.swing.SpinnerListModel(new String[] {"Seleziona Classe"}));
+        pnlCentro.add(spClassi);
+        spClassi.setBounds(40, 130, 240, 70);
 
         pnlMain.add(pnlCentro, java.awt.BorderLayout.CENTER);
 
@@ -275,7 +296,10 @@ public class FrameGita extends javax.swing.JFrame {
         aC.setVisible(true);
         
         Classe c = aC.getC();
+        classi.add(c);
         d.aggiungiClasse(c);
+        listaModificabile.add(c);
+        spClassi.setModel(new SpinnerListModel(listaModificabile));
     }//GEN-LAST:event_btnAggiungiClasseActionPerformed
 
     private void btnRimuoviStudenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRimuoviStudenteActionPerformed
@@ -287,21 +311,22 @@ public class FrameGita extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRimuoviGitaActionPerformed
 
     private void btnAggiungiStudenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAggiungiStudenteActionPerformed
-        AggiuntaStudente aS = new AggiuntaStudente(this, true);
+        AggiuntaStudente aS = new AggiuntaStudente(this, true, classi);
         aS.setLocationRelativeTo(null);
         aS.setVisible(true);
         
         int id = aS.getId();
         String nome = aS.getNome();
         String cognome = aS.getCognome();
+        Classe classe = aS.getClasse();
         int idGita = aS.getIdGita();
         
-        rG.cercaGita(idGita).aggiungiStudente(new Studente(id, nome, cognome));
+        rG.cercaGita(idGita).aggiungiStudente(new Studente(id, nome, cognome, classe));
     }//GEN-LAST:event_btnAggiungiStudenteActionPerformed
 
-    private void btnSalvaFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvaFileActionPerformed
-
-    }//GEN-LAST:event_btnSalvaFileActionPerformed
+    private void btnCancellaDatiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancellaDatiActionPerformed
+        d.cancellaDati();
+    }//GEN-LAST:event_btnCancellaDatiActionPerformed
 
     private void cmbGiteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbGiteMouseClicked
         if (cmbGite.getSelectedItem().equals("Visualizza Gite")) {
@@ -315,9 +340,9 @@ public class FrameGita extends javax.swing.JFrame {
     private javax.swing.JButton btnAggiungiClasse;
     private javax.swing.JButton btnAggiungiGita;
     private javax.swing.JButton btnAggiungiStudente;
+    private javax.swing.JButton btnCancellaDati;
     private javax.swing.JButton btnRimuoviGita;
     private javax.swing.JButton btnRimuoviStudente;
-    private javax.swing.JButton btnSalvaFile;
     private javax.swing.JComboBox<String> cmbGite;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTitolo;
@@ -326,6 +351,7 @@ public class FrameGita extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSinistra;
     private javax.swing.JPanel pnlTitolo;
+    private javax.swing.JSpinner spClassi;
     private javax.swing.JTable tblVisualizza;
     // End of variables declaration//GEN-END:variables
 }

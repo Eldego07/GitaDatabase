@@ -149,4 +149,35 @@ public class Database {
             System.err.println(e.getMessage());
         }
     }
+    
+    public void cancellaDati() {
+        String sqlGite = "DELETE FROM gite";
+        String sqlClassi = "DELETE FROM classi";
+        String sqlAlunni = "DELETE FROM alunni";
+        String sqlPartecipazione = "DELETE FROM partecipazione";
+        
+        String resetIdGite = "DELETE FROM sqlite_sequence WHERE name = 'gite'";
+        String resetIdClassi = "DELETE FROM sqlite_sequence WHERE name = 'classi'";
+        String resetIdAlunni = "DELETE FROM sqlite_sequence WHERE name = 'alunni'";
+        String resetIdPartecipazione = "DELETE FROM sqlite_sequence WHERE name = 'partecipazione'";
+
+        try (Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement()) {
+            
+            stmt.executeUpdate(sqlGite);
+            stmt.executeUpdate(sqlClassi);
+            stmt.executeUpdate(sqlAlunni);
+            stmt.executeUpdate(sqlPartecipazione);
+            
+            stmt.executeUpdate(resetIdGite);
+            stmt.executeUpdate(resetIdClassi);
+            stmt.executeUpdate(resetIdAlunni);
+            stmt.executeUpdate(resetIdPartecipazione);
+            
+            System.out.println("Tabella pulita con successo.");
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

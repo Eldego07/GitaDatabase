@@ -16,6 +16,7 @@ public class Studente {
     private int id;
     private String nome;
     private String cognome;
+    private Classe classe;
     
 
     /**
@@ -24,11 +25,12 @@ public class Studente {
      * @param nome
      * @param cognome 
      */
-    public Studente(int id, String nome, String cognome) {
+    public Studente(int id, String nome, String cognome, Classe classe) {
         this.idGite = new ArrayList<>();
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
+        this.classe = classe;
     }
 
     /**
@@ -55,6 +57,10 @@ public class Studente {
         return cognome;
     }
 
+    public Classe getClasse() {
+        return classe;
+    }
+    
     /**
      * Metodo set di id
      * @param id 
