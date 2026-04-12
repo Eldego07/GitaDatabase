@@ -137,4 +137,8 @@ public class Gita {
         return prezzo;
     }
 
+    @Override
+    public String toString() {
+        return luogo + " (" + durata + " gg, " + prezzo + " €)";
+    }
 }

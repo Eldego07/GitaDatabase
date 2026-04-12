@@ -12,7 +12,6 @@ import java.util.*;
  */
 public class Studente {
     // Attributi
-    private ArrayList<Integer> idGite;
     private int id;
     private String nome;
     private String cognome;
@@ -24,9 +23,9 @@ public class Studente {
      * @param id
      * @param nome
      * @param cognome 
+     * @param classe 
      */
     public Studente(int id, String nome, String cognome, Classe classe) {
-        this.idGite = new ArrayList<>();
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;

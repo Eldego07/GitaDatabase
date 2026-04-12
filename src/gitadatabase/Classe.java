@@ -9,32 +9,32 @@ package gitadatabase;
  * @author taboada.taddeo
  */
 public class Classe {
-    // Attributi
+    private int id;        // cla_id (PK dal DB)
     private int anno;
     private String sezione;
     private String indirizzo;
 
-    public Classe(int anno, String sezione, String indirizzo) {
+    /** Usato quando si carica dal DB (id già noto). */
+    public Classe(int id, int anno, String sezione, String indirizzo) {
+        this.id = id;
         this.anno = anno;
         this.sezione = sezione;
         this.indirizzo = indirizzo;
     }
 
-    public int getAnno() {
-        return anno;
+    /** Usato prima di salvare nel DB (id non ancora noto, messo a 0). */
+    public Classe(int anno, String sezione, String indirizzo) {
+        this(0, anno, sezione, indirizzo);
     }
 
-    public String getSezione() {
-        return sezione;
-    }
-
-    public String getIndirizzo() {
-        return indirizzo;
-    }
+    public int getId()          { return id; }
+    public void setId(int id)   { this.id = id; }
+    public int getAnno()        { return anno; }
+    public String getSezione()  { return sezione; }
+    public String getIndirizzo(){ return indirizzo; }
 
     @Override
     public String toString() {
-        return "Classe{" + "anno=" + anno + ", sezione=" + sezione + ", indirizzo=" + indirizzo + '}';
+        return anno + "ª " + sezione + " - " + indirizzo;
     }
-     
 }
