@@ -6,6 +6,7 @@ package gitadatabase;
 
 import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.SpinnerListModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
@@ -68,6 +69,9 @@ public class FrameGita extends javax.swing.JFrame {
         // controllo
         d.stampaGite();
         d.stampaClassi();
+        
+        btnRimuoviGita.setEnabled(true);
+        btnRimuoviStudente.setEnabled(false);
     }
     
     public void aggiornaStudenti() { 
@@ -84,6 +88,9 @@ public class FrameGita extends javax.swing.JFrame {
                 return;
             }
         }
+        
+        btnRimuoviGita.setEnabled(false);
+        btnRimuoviStudente.setEnabled(true);
     }
     
     public void rimuoviStudente() {
@@ -325,7 +332,19 @@ public class FrameGita extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAggiungiStudenteActionPerformed
 
     private void btnCancellaDatiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancellaDatiActionPerformed
-        d.cancellaDati();
+        int scelta = JOptionPane.showConfirmDialog(
+        this,
+        "=== ATTENZIONE! ===\n\n" +
+        "Sei sicuro di voler cancellare tutti i dati del database?\n\n" +
+        "Questa azione non è reversibile.\n\n",
+        "Cancella Dati",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE
+        );
+
+        if (scelta == JOptionPane.YES_OPTION) {
+            d.cancellaDati();
+        }
     }//GEN-LAST:event_btnCancellaDatiActionPerformed
 
     private void cmbGiteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbGiteMouseClicked
