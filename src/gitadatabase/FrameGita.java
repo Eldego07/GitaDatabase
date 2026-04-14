@@ -5,10 +5,9 @@
 package gitadatabase;
 
 import java.awt.*;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import javax.swing.SpinnerListModel;
-import javax.swing.border.TitledBorder;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.table.*;
 
 /**
@@ -40,24 +39,23 @@ public class FrameGita extends javax.swing.JFrame {
         tblVisualizza.setSize(pnlSinistra.getWidth(), pnlSinistra.getHeight());
         tblVisualizza.setModel(model);
         tblVisualizza.setRowHeight(pnlSinistra.getHeight() / tblVisualizza.getRowCount());
+        tblVisualizza.setFont(new Font("Dubai", 1, 16));
     }
     
     private void caricaDalDatabase() {
         classi = d.getClassi();
- 
-        cmbGite.removeAllItems();
+
         cmbGite.addItem("Visualizza Gite");
         for (Gita g : d.getGite()) {
             rG.aggiungiGita(g);
             cmbGite.addItem(g.getLuogo());
-            // Carica gli studenti già iscritti a questa gita
             for (Studente s : d.getAlunniPerGita(g.getId(), classi)) {
                 g.aggiungiStudente(s);
             }
         }
     }
     
-    public void aggiornaGite() { 
+    private void aggiornaGite() { 
         model.setRowCount(0);
         model.setColumnIdentifiers(new Object[]{"ID", "Destinazione", "Durata", "Prezzo"});
         pnlSinistra.setBorder(new TitledBorder(null, "Gite", 4, 0, new Font("Segoe UI", 1, 20), null));
@@ -74,7 +72,7 @@ public class FrameGita extends javax.swing.JFrame {
         btnRimuoviStudente.setEnabled(false);
     }
     
-    public void aggiornaStudenti() { 
+    private void aggiornaStudenti() { 
         model.setRowCount(0);
         model.setColumnIdentifiers(new Object[]{"Matricola", "Nome", "Cognome", "Classe"});
         pnlSinistra.setBorder(new TitledBorder(null, "Studenti a " + cmbGite.getSelectedItem(), 4, 0, new Font("Segoe UI", 1, 20), null));
@@ -85,7 +83,7 @@ public class FrameGita extends javax.swing.JFrame {
             if (g.getLuogo().equals(luogoSel)) {
                 for (Studente s : g.getListaStudenti())
                     model.addRow(new Object[]{s.getId(), s.getNome(), s.getCognome(), s.getClasse()});
-                return;
+                break;
             }
         }
         
@@ -100,6 +98,7 @@ public class FrameGita extends javax.swing.JFrame {
             int id = (int) model.getValueAt(rS, 0);
             for (Gita g : rG.getListaGite()) {
                 if (g.getLuogo().equals(cmbGite.getSelectedItem())) {
+                    d.eliminaAlunno(id);
                     g.eliminaStudente(id);
                     return;
                 }
@@ -113,7 +112,8 @@ public class FrameGita extends javax.swing.JFrame {
 
         if (rS != -1) {
             int id = (int) model.getValueAt(rS, 0);
-            cmbGite.removeItemAt(rS);
+            cmbGite.removeItemAt(rS + 1);
+            d.eliminaGita(id);
             rG.eliminaGita(id);
             model.removeRow(rS);
         }
@@ -334,7 +334,7 @@ public class FrameGita extends javax.swing.JFrame {
     private void btnCancellaDatiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancellaDatiActionPerformed
         int scelta = JOptionPane.showConfirmDialog(
         this,
-        "=== ATTENZIONE! ===\n\n" +
+        "                       === ATTENZIONE! ===\n\n" +
         "Sei sicuro di voler cancellare tutti i dati del database?\n\n" +
         "Questa azione non è reversibile.\n\n",
         "Cancella Dati",
@@ -348,7 +348,7 @@ public class FrameGita extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancellaDatiActionPerformed
 
     private void cmbGiteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbGiteMouseClicked
-        if (cmbGite.getSelectedItem().equals("Visualizza Gite")) {
+        if (cmbGite.getSelectedIndex() == 0) {
             aggiornaGite();
         } else {
             aggiornaStudenti(); 

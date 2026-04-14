@@ -101,7 +101,7 @@ public class AggiuntaStudente extends javax.swing.JDialog {
         pnlCentro.add(txtCognome);
 
         lblGita.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblGita.setText("ID Gita:");
+        lblGita.setText("Gita:");
         pnlCentro.add(lblGita);
 
         pnlCentro.add(cmbGite);
