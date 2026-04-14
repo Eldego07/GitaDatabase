@@ -185,6 +185,9 @@ public class Database {
      * Richiede che Classe abbia già un id valido (cioè sia stata salvata nel DB).
      */
     public int aggiungiAlunno(Studente s) {
+        int matricolaEsistente = cercaAlunnoEsistente(s);
+        if (matricolaEsistente != -1) return matricolaEsistente;
+        
         String insert = "INSERT INTO alunni(alu_nome, alu_cognome, alu_cla_id) VALUES(?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(url);
              PreparedStatement pstmt = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
@@ -223,6 +226,26 @@ public class Database {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+    }
+    
+    /**
+     * Cerca un alunno per nome, cognome e classe.
+     * Restituisce la matricola se esiste già, -1 altrimenti.
+     * Usato per evitare duplicati quando uno studente si iscrive a più gite.
+     */
+    public int cercaAlunnoEsistente(Studente s) {
+        String query = "SELECT alu_matr FROM alunni WHERE alu_nome = ? AND alu_cognome = ? AND alu_cla_id = ?";
+        try (Connection conn = DriverManager.getConnection(url);
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, s.getNome());
+            pstmt.setString(2, s.getCognome());
+            pstmt.setInt(3, s.getClasse().getId());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return rs.getInt("alu_matr");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return -1;
     }
 
     /**

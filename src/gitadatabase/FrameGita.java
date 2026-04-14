@@ -323,6 +323,13 @@ public class FrameGita extends javax.swing.JFrame {
 
         int matricola = d.aggiungiAlunno(s);
         s.setId(matricola);
+        
+        if (gita.cercaStudente(matricola) != null) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+            s.getNome() + " " + s.getCognome() + " è già iscritto a questa gita.",
+            "Iscrizione duplicata", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
  
         d.aggiungiPartecipazione(matricola, gita.getId());
  
