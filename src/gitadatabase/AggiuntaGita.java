@@ -12,7 +12,6 @@ public class AggiuntaGita extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AggiuntaGita.class.getName());
     private String luogo;
-    private int id;
     private int durata;
     private int prezzo;
 
@@ -36,8 +35,6 @@ public class AggiuntaGita extends javax.swing.JDialog {
         pnlTitolo = new javax.swing.JPanel();
         lblTitolo = new javax.swing.JLabel();
         pnlCentro = new javax.swing.JPanel();
-        lblId = new javax.swing.JLabel();
-        txtId = new javax.swing.JTextField();
         lblLuogo = new javax.swing.JLabel();
         txtLuogo = new javax.swing.JTextField();
         lblDurata = new javax.swing.JLabel();
@@ -50,7 +47,6 @@ public class AggiuntaGita extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Aggiungi una Gita");
         setMinimumSize(new java.awt.Dimension(500, 350));
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         pnlTitolo.setBackground(new java.awt.Color(153, 255, 255));
         pnlTitolo.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -65,14 +61,7 @@ public class AggiuntaGita extends javax.swing.JDialog {
 
         pnlCentro.setBackground(new java.awt.Color(153, 255, 255));
         pnlCentro.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        pnlCentro.setLayout(new java.awt.GridLayout(4, 2, 10, 10));
-
-        lblId.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblId.setText("ID:");
-        pnlCentro.add(lblId);
-
-        txtId.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        pnlCentro.add(txtId);
+        pnlCentro.setLayout(new java.awt.GridLayout(3, 2, 10, 10));
 
         lblLuogo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblLuogo.setText("Luogo:");
@@ -117,7 +106,6 @@ public class AggiuntaGita extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfermaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfermaActionPerformed
-        id = Integer.parseInt(txtId.getText());
         luogo = txtLuogo.getText();
         durata = Integer.parseInt(txtDurata.getText());
         prezzo = Integer.parseInt(txtPrezzo.getText());
@@ -127,10 +115,6 @@ public class AggiuntaGita extends javax.swing.JDialog {
 
     public String getLuogo() {
         return luogo;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public int getDurata() {
@@ -144,7 +128,6 @@ public class AggiuntaGita extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConferma;
     private javax.swing.JLabel lblDurata;
-    private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblLuogo;
     private javax.swing.JLabel lblPrezzo;
     private javax.swing.JLabel lblTitolo;
@@ -152,7 +135,6 @@ public class AggiuntaGita extends javax.swing.JDialog {
     private javax.swing.JPanel pnlConferma;
     private javax.swing.JPanel pnlTitolo;
     private javax.swing.JTextField txtDurata;
-    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtLuogo;
     private javax.swing.JTextField txtPrezzo;
     // End of variables declaration//GEN-END:variables
