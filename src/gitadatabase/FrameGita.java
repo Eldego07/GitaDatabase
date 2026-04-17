@@ -281,15 +281,15 @@ public class FrameGita extends javax.swing.JFrame {
         aG.setLocationRelativeTo(null);
         aG.setVisible(true);
         
-        int id = aG.getId();
         String luogo = aG.getLuogo();
         int durata = aG.getDurata();
         int prezzo = aG.getPrezzo();
-        Gita g = new Gita(id, luogo, durata, prezzo);
+        Gita g = new Gita(0, luogo, durata, prezzo);
         
         if (rG.aggiungiGita(g)) {
             cmbGite.addItem(luogo);
-            d.aggiungiGita(g);
+            int id = d.aggiungiGita(g);
+            g.setId(id);
         }
         
         aggiornaGite();
